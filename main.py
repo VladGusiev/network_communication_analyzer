@@ -61,6 +61,9 @@ ip_protocols = {
     115: "L2TP"
 }
 
+#list of lists (ip and amount of repetitions)
+sender_ip_addresses = []
+sender_ip_pakets_amount = []
 
 def display_info(order, paket, frame_type, all_data):
     hexa_frame_output = ''
@@ -166,6 +169,12 @@ def display_info(order, paket, frame_type, all_data):
                     'protocol': detect_ip_protocol(paket[46:48]),
                     'hexa_frame': LiteralScalarString(hexa_frame_output)
                 }
+            if src_ip not in sender_ip_addresses:
+                sender_ip_addresses.append(src_ip)
+                sender_ip_pakets_amount.append(1)
+            else:
+                sender_ip_pakets_amount[sender_ip_addresses.index(src_ip)] += 1
+
         else:
             # NOT PRINTING PROTOCOL FOR NOT IPV4
             data = {
@@ -221,20 +230,19 @@ def detect_ether_type(bytes):
 
 
 def detect_frame_type(order, paket, all_data):
+
     if is_ethernet(paket[24:28]):
-        # display_ethernet(order, paket)
         display_info(order, paket, "ETHERNET II", all_data)
+
     elif is_raw(paket[28:32]):
-        # print("frame type:  IEEE 802.3 RAW")
         display_info(order, paket, "IEEE 802.3 RAW", all_data)
+
     elif is_llc_snap(paket[28:34]):
-        # print("frame type: IEEE 802.3 LLC & SNAP")
-        # detect_ether_type(paket[40:44])
         display_info(order, paket, "IEEE 802.3 LLC & SNAP", all_data)
+
     else:
-        # print("frame type: IEEE 802.3 LLC")
-        # detect_llc_sap(paket[30:32])
         display_info(order, paket, "IEEE 802.3 LLC", all_data)
+
 
 # TODO part 2 of task 2 !!!
 # TODO e) Čísla protokolov v rámci Ethernet II (pole Ethertype), v IP pakete (pole Protocol) a čísla portov pre transportné protokoly musia byť načítané z jedného alebo viacerých externých textových súborov (body a, c, d v úlohe 2).
@@ -256,10 +264,29 @@ def main():
 
         detect_frame_type(order, hex_packet, all_data)
 
+    # Implemented task 3 !!!
+    ipv4_senders = []
+    max_send_packets_by = []
+
+    for sender in sender_ip_addresses:
+        current_sender_stat = {
+            'node': sender,
+            'number_of_sent_packets': sender_ip_pakets_amount[sender_ip_addresses.index(sender)]
+        }
+        ipv4_senders.append(current_sender_stat)
+
+    largest_packets_amount = max(sender_ip_pakets_amount)
+    for sender in sender_ip_addresses:
+        if sender_ip_pakets_amount[sender_ip_addresses.index(sender)] == largest_packets_amount:
+            max_send_packets_by.append(sender)
+
     data = {
         'name': 'PKS2023/24',
         'pcap_name': pcap_file,
-        'packets': all_data
+        'packets': all_data,
+
+        'ipv4_senders': ipv4_senders,
+        'max_send_packets_by': max_send_packets_by
     }
 
     with open(yaml_file_path, 'w') as yaml_file:

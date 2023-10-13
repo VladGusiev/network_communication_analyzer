@@ -6459,3 +6459,12 @@ packets:
     74 47 61 74 65 77 61 79 44 65 76 69 63 65 3A 31
     0D 0A 4D 61 6E 3A 22 73 73 64 70 3A 64 69 73 63
     6F 76 65 72 22 0D 0A 4D 58 3A 33 0D 0A 0D 0A
+ipv4_senders:
+- node: 10.20.30.1
+  number_of_sent_packets: 91
+- node: 10.20.30.254
+  number_of_sent_packets: 20
+- node: 0.0.0.0
+  number_of_sent_packets: 3
+max_send_packets_by:
+- 10.20.30.1
