@@ -23,42 +23,43 @@ llc_sap = {
     "f0": "NETBIOS"
 }
 
+# TODO task 2 part 2 -> ethertype, protocol, number of ports for transporting protocols must be from external txt file!
 EtherType = {
-    "0200": "XEROX PUP",
-    "0201": "PUP Addr Trans",
-    "2000": "CDP",
-    "0800": "Internet IP (IPv4)",
-    "0801": "X.75 Internet",
-    "0805": "X.25 Level 3",
-    "0806": "ARP",
-    "8035": "Reverse ARP",
-    "809b": "AppleTalk",
-    "80f3": "AppleTalk AARP (Kinetics)",
-    "8100": "IEEE 802.1Q VLAN-tagged frames",
-    "8137": "Novel IPX",
-    "86dd": "IPv6",
-    "880b": "PPP",
-    "8847": "MPLS",
-    "88cc": "LLDP",
-    "8848": "MPLS with-assigned label",
-    "8863": "PPPoE Discovery stage",
-    "8864": "PPoE Session Stage",
-    "9000": "Loopback"
+    # "0200": "XEROX PUP",
+    # "0201": "PUP Addr Trans",
+    # "2000": "CDP",
+    # "0800": "Internet IP (IPv4)",
+    # "0801": "X.75 Internet",
+    # "0805": "X.25 Level 3",
+    # "0806": "ARP",
+    # "8035": "Reverse ARP",
+    # "809b": "AppleTalk",
+    # "80f3": "AppleTalk AARP (Kinetics)",
+    # "8100": "IEEE 802.1Q VLAN-tagged frames",
+    # "8137": "Novel IPX",
+    # "86dd": "IPv6",
+    # "880b": "PPP",
+    # "8847": "MPLS",
+    # "88cc": "LLDP",
+    # "8848": "MPLS with-assigned label",
+    # "8863": "PPPoE Discovery stage",
+    # "8864": "PPoE Session Stage",
+    # "9000": "Loopback"
 }
 
 ip_protocols = {
-    1: "ICMP",
-    2: "IGMP",
-    6: "TCP",
-    9: "IGRP",
-    17: "UDP",
-    47: "GRE",
-    50: "ESP",
-    51: "AH",
-    57: "SKIP",
-    88: "EIGRP",
-    89: "OSPF",
-    115: "L2TP"
+    # 1: "ICMP",
+    # 2: "IGMP",
+    # 6: "TCP",
+    # 9: "IGRP",
+    # 17: "UDP",
+    # 47: "GRE",
+    # 50: "ESP",
+    # 51: "AH",
+    # 57: "SKIP",
+    # 88: "EIGRP",
+    # 89: "OSPF",
+    # 115: "L2TP"
 }
 
 #list of lists (ip and amount of repetitions)
@@ -244,13 +245,30 @@ def detect_frame_type(order, paket, all_data):
         display_info(order, paket, "IEEE 802.3 LLC", all_data)
 
 
-# TODO part 2 of task 2 !!!
-# TODO e) Čísla protokolov v rámci Ethernet II (pole Ethertype), v IP pakete (pole Protocol) a čísla portov pre transportné protokoly musia byť načítané z jedného alebo viacerých externých textových súborov (body a, c, d v úlohe 2).
-# TODO f) Pre známe protokoly a porty (minimálne protokoly v úlohách 1 a 2) budú uvedené aj ich názvy. Program bude schopný uviesť k rámcu názov vnoreného protokolu aj po doplnení nového názvu k číslu protokolu, resp. portu do externého súboru.
-# TODO g) Za externý súbor sa nepovažuje súbor knižnice, ktorá je vložená do programu.
 # --------------------------------------------------------------------------------------------
 
 def main():
+
+    print(EtherType)
+    # creating ethertype dictionary:
+    ethertype_file = "./ethertypes.txt"
+    with open(ethertype_file, "r") as f:
+        for line in f:
+            splited_line = line.split()
+            EtherType[splited_line[0]] = " ".join(splited_line[1::])
+            # print(line.split())
+    print(EtherType)
+
+    print(ip_protocols)
+    # creating ethertype dictionary:
+    ip_protocol_file = "./ip_protocols.txt"
+    with open(ip_protocol_file, "r") as f:
+        for line in f:
+            splited_line = line.split()
+            ip_protocols[int(splited_line[0])] = " ".join(splited_line[1::])
+            # print(line.split())
+    print(ip_protocols)
+
     pcap_file = "./vzorky_pcap_na_analyzu/trace-26.pcap"
     packets = rdpcap(pcap_file)
 

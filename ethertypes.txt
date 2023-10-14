@@ -1,0 +1,20 @@
+0200 XEROX PUP
+0201 PUP Addr Trans
+2000 CDP
+0800 Internet IP (IPv4)
+0801 X.75 Internet
+0805 X.25 Level 3
+0806 ARP
+8035 Reverse ARP
+809b AppleTalk
+80f3 AppleTalk AARP (Kinetics)
+8100 IEEE 802.1Q VLAN-tagged frames
+8137 Novel IPX
+86dd IPv6
+880b PPP
+8847 MPLS
+88cc LLDP
+8848 MPLS with-assigned label
+8863 PPPoE Discovery stage
+8864 PPoE Session Stage
+9000 Loopback
